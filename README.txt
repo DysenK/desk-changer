@@ -15,4 +15,4 @@ driver1DIR and driver2DIR connected to the DIR pins of the drivers seperately.
 L293D H-Bridge IC used for driving DC motor. dcMotorEnable, IN1, and IN2 are connected to respective pins on L293D.
 DC and servo motors powered by a serperate 5V supply.
 
-homesensor1 and homesensor2 both wired to hall effect sensors placed at upper limit of elevaor for redundancy.
+homesensor1 and homesensor2 both wired to hall effect sensors placed at upper limit of elevator for redundancy.
