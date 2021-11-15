@@ -72,8 +72,8 @@ void stepperStep(bool stepperDir) {
   delayMicroseconds(pulseDelay);
 }
 
+  // Moves carriage down to the last shelf retrieved from and return the item
 void returnAndRetrieve(int distance, int lastShelf) {
-  // Move carriage down to the last shelf retrieved from and return the item
   for (int i = 0; i < shelfDistance(); i++) {
     stepperStep(LOW);
   }
