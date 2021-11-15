@@ -51,7 +51,7 @@ void returnItem() {
 }
 
 // Returns the distance from home to the last shelf retrieved from
-int shelfDistance() {
+int lastShelfDistance() {
     switch (EEPROM.read(0)) {
       case 0:
         return 0;
@@ -72,15 +72,18 @@ void stepperStep(bool stepperDir) {
   delayMicroseconds(pulseDelay);
 }
 
-  // Moves carriage down to the last shelf retrieved from and return the item
+// Returns item to its shelf and retrieves new one from shelf specified (takes distance to requested shelf )
 void returnAndRetrieve(int distance, int lastShelf) {
-  for (int i = 0; i < shelfDistance(); i++) {
-    stepperStep(LOW);
+  // Move carriage down to the last shelf retrieved from and return the item if applicable
+  if (EEPROM.read(0) != 0) {
+    for (int i = 0; i < lastShelfDistance(); i++) {
+      stepperStep(LOW);
+    }
+    returnItem();
   }
-  returnItem();
 
   // Set direction carriage must move based on previous shelf location
-  if (shelfDistance() > distance) {
+  if (lastShelfDistance() > distance) {
     stepDir = HIGH;
   }
   else {
@@ -88,7 +91,7 @@ void returnAndRetrieve(int distance, int lastShelf) {
   }
     
     // Move carriage from last shelf to selected shelf, retrieve new item, and return home
-  for (int i = 0; i < abs(shelfDistance() - distance); i++) {
+  for (int i = 0; i < abs(lastShelfDistance() - distance); i++) {
     stepperStep(stepDir);
   }
     
@@ -123,13 +126,13 @@ void setup() {
   }
 }
 
-
+/* The controller will wait to receive a button input for a shelf whos contents are not already retrieved.
+A process will then begin to replace the current item with the item on the shelf requested.
+If a button is pressed while a process is running nothing will happen. */
 void loop() {
-  // Set a process to run depending on which button is pressed (buttons will do nothing while current process is running)
-  
   if (digitalRead(returnEmpty) == LOW && EEPROM.read(0) != 0) {
     // Move carriage down to last shelf, return the item, move up to home
-    for (int i = 0; i < shelfDistance(); i++) {
+    for (int i = 0; i < lastShelfDistance(); i++) {
       stepperStep(LOW);
     }
 
