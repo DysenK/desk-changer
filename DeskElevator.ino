@@ -32,16 +32,22 @@ void retrieveItem() {
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   delay(3000);
+  analogWrite(dcMotorEnable, 0);
+  armServo.write(0);
+  delay(500);
 }
 
 // Extends servo arm, pushes item onto dc motor wheel, runs motor to push item onto shelf
 void returnItem() {
-  armServo.write(0);
+  armServo.write(90);
   delay(500);
   analogWrite(dcMotorEnable, 50);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   delay(3000);
+  analogWrite(dcMotorEnable, 0);
+  armServo.write(0);
+  delay(500);
 }
 
 // Returns the distance from home to the last shelf retrieved from
@@ -107,7 +113,9 @@ void setup() {
   pinMode(homeSensor1, INPUT);
   pinMode(homeSensor2, INPUT);
 
+  // Set servo pin and move it to the default position
   armServo.attach(servoPin);
+  armServo.write(0);
   
   // Home carriage to top of assembly
   while (digitalRead(homeSensor1) == true && digitalRead(homeSensor2) == true) {
